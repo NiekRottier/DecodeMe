@@ -22,15 +22,6 @@
   font-size: 24px;
 }
 
-header{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  margin: 30px;
-}
-
 // Hide the ugly file input and use the label as the button
 #inputContainer{
   display: flex;

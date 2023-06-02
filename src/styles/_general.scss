@@ -29,6 +29,8 @@ menu{
     
     a{
         margin-right: 2rem;
+        margin-bottom: 0;
+        text-align: center;
         color: $white;
         font-size: 1.5rem;
         font-weight: 700;
@@ -36,12 +38,17 @@ menu{
         
         &:hover{
             text-decoration: underline;
+            cursor: pointer;
         }
 
-        &.home-icon img{
-            // background-image: url('./icons/home.svg');
+        &.home-icon img, &.menu-icon img{
             height: 2rem;
             width: 2rem;
+        }
+
+        &.menu-icon {
+            display: none;
+            align-self: flex-end;
         }
     }
 }
@@ -96,10 +103,10 @@ main{
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+    gap: 2rem;
     margin: 2rem;
 
     > section{
-        margin: 1rem 0;
         padding: 2rem;
         border-radius: 5px;
         background-color: $primary-color;
@@ -133,5 +140,60 @@ footer{
 
     > p{
         margin: 0;
+    }
+}
+
+@media only screen and (max-width: 1200px){
+    main{
+        > section{
+            &.width--50, &.width--33{
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 800px){
+    menu{
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        // background: $primary-color--dark;
+        backdrop-filter: blur(8px);
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0 4px 20px 1px black;
+        
+        a{
+            display: none;
+            margin-right: 0;
+            margin-top: 1rem;
+
+            &:first-child{
+                margin-top: 0;
+            }
+
+            &.menu-icon{
+                display: inline;
+                img{
+                    display: block;
+                }
+            }
+        }
+
+        &.active{
+            a{
+                display: inline;
+            }
+        }
+    }
+
+    .header{
+        height: calc(50vh + 6rem);
+    }
+}
+
+@media only screen and (max-width: 1200px){
+    :root{
+        font-size: 12px;
     }
 }
