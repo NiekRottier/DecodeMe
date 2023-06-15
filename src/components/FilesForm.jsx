@@ -3,9 +3,10 @@ import '../styles/FilesForm.scss';
 import { Link } from 'react-router-dom';
 
 function FilesForm() {
-  const [uploadedFiles, setUploadedFiles] = useState([])
-  const [isFileUploaded, setIsFileUploaded] = useState(0)
-  const [unparsedJson, setUnparsedJson] = useState([])
+  const [browserHistoryJson, setBrowserHistoryJson] = useState({})
+  const [autofillJson, setAutofillJson] = useState({})
+
+  const [isFileUploaded, setIsFileUploaded] = useState(false)
 
   // Check if an object is empty
   function isEmptyObject(obj) {
@@ -17,73 +18,71 @@ function FilesForm() {
   }
 
   function handleChange(event) {
-    let files = event.target.files[0]
-    console.log(files);
+    let files = Array.from(event.target.files)
+    
     if (files) {
-      setUploadedFiles([
-        ...uploadedFiles,
-        files
-      ]);
-      setIsFileUploaded(isFileUploaded+1);
-      console.log('File has been uploaded.')
-    } else {
-      console.log('File upload has failed.')
+      files.forEach(file => {
+        // console.log(file.name);
+        readJsonFile(file)
+      });
+    }else {
+      console.warn('File upload has failed.')
     }
   }
 
-  useEffect(() => {
-    console.log(uploadedFiles);
-  }, [uploadedFiles])
+function sortJson(json) {
+  let jsonName = Object.keys(json)[0]
+  setIsFileUploaded(true);
+
+  switch (jsonName) {
+    case 'Browser History':
+      setBrowserHistoryJson(json)
+      console.log('Browser History uploaded')
+      break;
+
+    case 'Autofill Profile':
+      setAutofillJson(json)
+      console.log('Autofill uploaded')
+      break;
+  
+    default:
+      setIsFileUploaded(false);
+      console.log('Unknown file')
+      break;
+  }
+}
 
   // Get the content from the file and put it in the FileJson state
   function readJsonFile(file) {
-    if (isFileUploaded) {
-      const blob = new Blob([file], {type:"application/json"});
-      
-      let reader = new FileReader()
-      reader.addEventListener("load", () => {
-        setUnparsedJson([
-          ...unparsedJson,
-          JSON.stringify(reader.result)
-        ])
-        console.log('Hello')
-      })
+    const blob = new Blob([file], {type:"application/json"});
+    
+    let reader = new FileReader()
+    reader.addEventListener("load", () => sortJson(JSON.parse(reader.result)))
 
-      reader.readAsText(blob)
-
-      console.log('Put the JSON content into a State')
-    } else {
-      console.log('No file has been uploaded.')
-    }
+    reader.readAsText(blob)
   }
-
-  useEffect(() => {
-    if (isFileUploaded && !isEmptyObject(uploadedFiles)) {
-      uploadedFiles.forEach(uploadedFile => {
-        readJsonFile(uploadedFile)
-        console.log(uploadedFile.name);
-      })
-    }
-  }, [uploadedFiles])
 
   return (
     <div className="FilesForm">
-      <hr />
-      <div className='fileInput'>
-        <label className='btn--primary-dark' htmlFor="fileInput">Upload BrowserHistory.json</label>
-        <input type="file" id="fileInput" accept='.json' onChange={(e) => handleChange(e)} />
-        <small>{isFileUploaded === 1 ? 'Uploaded: ' + uploadedFiles[0].name : 'No file uploaded'}</small>
+      <div className='uploadButtons'>
+        <div className='fileInput'>
+          <label className='btn--white' htmlFor="fileInput">Upload JSON files</label>
+          <input type="file" id="fileInput" accept='.json' onChange={(e) => handleChange(e)} multiple />
+        </div>
+        <Link 
+          to={isFileUploaded ? '/decoder' : ''} 
+          state={{
+            'Browser History' : browserHistoryJson,
+            'Autofill' : autofillJson
+          }} 
+          className={isFileUploaded ? 'btn--primary-dark' : 'btn--primary-dark disabled'}
+          >{isFileUploaded ? 'DecodeMe!' : 'Upload files...'}</Link>
       </div>
-      <div className='fileInput'>
-        <label className='btn--primary-dark' htmlFor="fileInput">Upload Autofill.json</label>
-        <input type="file" id="fileInput" accept='.json' onChange={(e) => handleChange(e)} />
-        <small>{isFileUploaded === 2 ? 'Uploaded: ' + uploadedFiles[1].name : 'No file uploaded'}</small>
+      <div className="uploadList">
+        <p><i>Supported files:</i></p>
+        <p className={!isEmptyObject(browserHistoryJson) ? 'uploaded' : ''}>BrowserHistory.json</p>
+        <p className={!isEmptyObject(autofillJson) ? 'uploaded' : ''}>Autofill.json</p>
       </div>
-      <Link 
-        to='/decoder' 
-        state={{'unparsedJson' : unparsedJson}} 
-        className={isFileUploaded ? 'btn--white' : 'btn--white hidden'}
-        >{isFileUploaded ? 'DecodeMe!' : 'Upload files...'}</Link>
     </div>
   );
 }

@@ -77,11 +77,11 @@ function Home() {
         <section className='width--100' id='get-started'>
           <h1>DecodeMe!</h1>
           <p>Decode your requested files and unlock valuable insights. Upload the files you received in response to your data requests, 
-            and our decoding process will analyze and visualize the contents, providing you with a clear overview. 
+            and our decoding process will analyze and visualize the contents, providing you with a clear overview. <br />
             Your privacy is our priority - we don't store any uploaded data, ensuring complete confidentiality. 
             Once the decoding is complete, all data is permanently deleted. 
             Discover hidden information in your data and make informed decisions about your digital footprint. DecodeMe now!</p>
-
+          <hr />
           <FilesForm />
 
         </section>
