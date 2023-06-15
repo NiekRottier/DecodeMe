@@ -46,7 +46,9 @@ p, a, [class *= btn-]{
     }
 }
 
-
+li{
+    font-size: 1.2rem;
+}
 
 @mixin btn($color){
     padding: 0.5rem 1rem;
@@ -62,13 +64,12 @@ p, a, [class *= btn-]{
     &:hover{
         background-color: darken($color, 10%);
         cursor: pointer;
-        &.disabled{
-            cursor: default;
-            background-color: $color;
-        }
     }
     &:active{
         box-shadow: inset 1px 1px 4px grey;
+    }
+    &.hidden{
+        display: none
     }
 }
 

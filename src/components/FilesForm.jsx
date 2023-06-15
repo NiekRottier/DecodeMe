@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function FilesForm() {
   const [uploadedFiles, setUploadedFiles] = useState([])
-  const [isFileUploaded, setIsFileUploaded] = useState(false)
+  const [isFileUploaded, setIsFileUploaded] = useState(0)
   const [unparsedJson, setUnparsedJson] = useState([])
 
   // Check if an object is empty
@@ -24,7 +24,7 @@ function FilesForm() {
         ...uploadedFiles,
         files
       ]);
-      setIsFileUploaded(true);
+      setIsFileUploaded(isFileUploaded+1);
       console.log('File has been uploaded.')
     } else {
       console.log('File upload has failed.')
@@ -68,15 +68,21 @@ function FilesForm() {
 
   return (
     <div className="FilesForm">
+      <hr />
       <div className='fileInput'>
-        <label className='btn--primary-dark' htmlFor="fileInput">Upload Search History</label>
+        <label className='btn--primary-dark' htmlFor="fileInput">Upload BrowserHistory.json</label>
         <input type="file" id="fileInput" accept='.json' onChange={(e) => handleChange(e)} />
-        <small>{isFileUploaded ? 'Uploaded: ' + uploadedFiles[0].name : 'No file uploaded'}</small>
+        <small>{isFileUploaded === 1 ? 'Uploaded: ' + uploadedFiles[0].name : 'No file uploaded'}</small>
+      </div>
+      <div className='fileInput'>
+        <label className='btn--primary-dark' htmlFor="fileInput">Upload Autofill.json</label>
+        <input type="file" id="fileInput" accept='.json' onChange={(e) => handleChange(e)} />
+        <small>{isFileUploaded === 2 ? 'Uploaded: ' + uploadedFiles[1].name : 'No file uploaded'}</small>
       </div>
       <Link 
         to='/decoder' 
         state={{'unparsedJson' : unparsedJson}} 
-        className={isFileUploaded ? 'btn--white' : 'btn--white disabled'}
+        className={isFileUploaded ? 'btn--white' : 'btn--white hidden'}
         >{isFileUploaded ? 'DecodeMe!' : 'Upload files...'}</Link>
     </div>
   );

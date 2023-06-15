@@ -54,20 +54,34 @@ function Home() {
             DecodeMe helps you request your data and provides links to interesting articles that discuss data privacy and give tips.
             This is done to help you on your way on the data protection journey</p>
           <p>Of course DecodeMe does not save any of the data uploaded by you, not even in sessions or cookies. As soon as you quit the website all the data is gone. 
-            This is done to provide you with the safestenvironment to explore and learn about your data.</p>
+            This is done to provide you with the safest environment to explore and learn about your data.</p>
         </section>
 
         <section className='width--50' id='request-data'>
           <h1>Request your data</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ultricies convallis neque, in scelerisque nisi tincidunt nec. Vivamus quis nisl arcu. Fusce sed sagittis felis, in fermentum tortor. In luctus felis ac interdum imperdiet. Praesent imperdiet lacinia neque a ornare. Curabitur ultricies sit amet dolor ac commodo. Fusce consequat, lorem id blandit vulputate, augue mi lobortis erat, non gravida mi quam at nisl. Morbi eu egestas risus. Maecenas rutrum eros ex, vestibulum ultricies purus faucibus eu. Sed urna lorem, tincidunt vitae ex in, bibendum sagittis augue. Fusce dignissim urna nisi, rhoncus rutrum nulla accumsan sit amet.</p>
-          <h2>Header 2</h2>
-          <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum vel malesuada purus. Phasellus vulputate odio at tortor ultrices, a tempus justo dignissim. Donec ipsum nibh, feugiat at est eu, egestas suscipit felis. Aliquam non pellentesque enim. In sed lorem non nisl iaculis placerat. Etiam fringilla orci eu maximus eleifend. Praesent sagittis velit eu dui tempus aliquam sit amet at lectus. Vestibulum sollicitudin mi eu lorem placerat, sed hendrerit lectus vulputate.</p>
+          <p>For requesting your Chrome data from Google, here are the steps to follow using Google Takeout:</p>
+          <ol>
+            <li>Visit the Google Takeout website: <a href="https://takeout.google.com/">https://takeout.google.com/</a>.</li>
+            <li>Sign in to your Google Account.</li>
+            <li>Select "Chrome" from the list of available products and services.</li>
+            <li>Customize your Chrome data export options if desired.</li>
+            <li>Choose the export method, either email or cloud storage.</li>
+            <li>Configure export frequency and file size as needed.</li>
+            <li>Click "Create export" to initiate the data export process.</li>
+            <li>Wait for the export to complete (an email notification will be sent).</li>
+            <li>Access and download your Chrome data from the provided link or chosen destination.</li>
+          </ol>
+          <p>By following these steps, you can easily request and obtain your Chrome data from Google.</p>
         </section>
 
         <section className='width--100' id='get-started'>
           <h1>DecodeMe!</h1>
-          <p className="intro">Introduction sentence</p>
-          <p>Paragraph with <i>italic</i>, <b>bold</b> and <b><i>bold-italic</i></b> text. <a href="/">I am a pretty link.</a></p>
+          <p>Decode your requested files and unlock valuable insights. Upload the files you received in response to your data requests, 
+            and our decoding process will analyze and visualize the contents, providing you with a clear overview. 
+            Your privacy is our priority - we don't store any uploaded data, ensuring complete confidentiality. 
+            Once the decoding is complete, all data is permanently deleted. 
+            Discover hidden information in your data and make informed decisions about your digital footprint. DecodeMe now!</p>
+
           <FilesForm />
 
         </section>

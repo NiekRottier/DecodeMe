@@ -4,6 +4,15 @@
     display: flex;
     flex-flow: row wrap;
     gap: 1rem;
+    margin-top: 1rem;
+
+    hr{
+        height: 2px;
+        width: 100%;
+        border: none;
+        border-radius: 1px;
+        background-color: white;
+    }
 
     // Hide the ugly file input and use the label as the button
     .fileInput{
