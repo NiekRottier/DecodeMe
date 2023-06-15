@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import './styles/Home.scss';
+import '../styles/Home.scss';
+import FilesForm from '../components/FilesForm';
 
 function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -67,7 +68,8 @@ function Home() {
           <h1>DecodeMe!</h1>
           <p className="intro">Introduction sentence</p>
           <p>Paragraph with <i>italic</i>, <b>bold</b> and <b><i>bold-italic</i></b> text. <a href="/">I am a pretty link.</a></p>
-          <a className="btn--white" href='/decoder'>Get started!</a>
+          <FilesForm />
+
         </section>
       </main>
 

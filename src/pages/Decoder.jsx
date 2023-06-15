@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import './styles/Decoder.scss';
+import '../styles/Decoder.scss';
 
 import { TagCloud } from 'react-tagcloud'
+import { useLocation } from 'react-router-dom';
 
 function Decoder() {
   const [uploadedFile, setUploadedFile] = useState({name: 'No file uploaded'})
@@ -14,6 +15,12 @@ function Decoder() {
   const [duplicateURLs, setDuplicateURLs] = useState({})
   const [TagCloudHTML, setTagCloudHTML] = useState(<p className='tag-cloud'>Please analyse the file to see the wordcloud</p>)
   const [topURLs, setTopURLs] = useState(<p>Please analyse the file to see the top URLs</p>)
+
+  let location = useLocation()
+
+  useEffect(() => {
+    console.log(location.state);
+  }, [location])
 
   function handleChange(event) {
     console.log(event.target.files[0]);

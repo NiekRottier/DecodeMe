@@ -51,15 +51,21 @@ p, a, [class *= btn-]{
 @mixin btn($color){
     padding: 0.5rem 1rem;
     width: max-content;
+    border: none;
     border-radius: 5px;
     background-color: $color;
     box-shadow: 1px 1px 4px grey;
+    text-align: center;
     text-decoration: none;
     color: $black;
     font-weight: 600;
     &:hover{
         background-color: darken($color, 10%);
         cursor: pointer;
+        &.disabled{
+            cursor: default;
+            background-color: $color;
+        }
     }
     &:active{
         box-shadow: inset 1px 1px 4px grey;

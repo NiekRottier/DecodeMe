@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Decoder from './Decoder';
-import Home from './Home';
+import Decoder from './pages/Decoder';
+import Home from './pages/Home';
 
 const router = createBrowserRouter([
   {
