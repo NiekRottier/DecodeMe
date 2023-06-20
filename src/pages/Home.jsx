@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
 import '../styles/Home.scss';
 import FilesForm from '../components/FilesForm';
+import Menu from '../components/Menu';
 
 function Home() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [menuIcon, setMenuIcon] = useState('/assets/icons/menu.svg')
-
-  useEffect(() => {
-    if (menuOpen) {
-      setMenuIcon('/assets/icons/xmark.svg')
-    } else {
-      setMenuIcon('/assets/icons/menu.svg')
-    }
-  }, [menuOpen])
 
   function scroll(id) {
     let targetPos = document.getElementById(id).getBoundingClientRect()
@@ -22,13 +13,11 @@ function Home() {
 
   return (
     <div className="Home">
-      <menu className={menuOpen ? 'active' : ''}>
-        <a onClick={ () => setMenuOpen(!menuOpen) } className='menu-icon'><img src={menuIcon} alt="close icon" /></a>
-        <a onClick={() => setMenuOpen(false)} href="#" className="home-icon"><img src="/assets/icons/home.svg" alt="home icon" /></a>
-        <a onClick={ () => { scroll('decode-me'); setMenuOpen(false) }}>Data transparancy</a>
-        <a onClick={ () => { scroll('request-data'); setMenuOpen(false) }}>Request your data</a>
-        <a onClick={ () => { scroll('get-started'); setMenuOpen(false) }}>DecodeMe!</a>
-      </menu>
+      <Menu settings={[
+        { 'target': 'decode-me', 'title' : 'Data transparancy' },
+        { 'target': 'request-data', 'title' : 'Request your data' },
+        { 'target': 'get-started', 'title' : 'DecodeMe!' }
+      ]}/>
 
       <header className='header'>
         <div className="header__img">
@@ -48,8 +37,8 @@ function Home() {
             This is done to provide transparancy, but the response is often a JSON or other data file. This is not easily accessible for most people, and counteracts the transparancy. 
             This results in people still not being able to get any meaningful insight into their data. </p>
           <h2>Why use DecodeMe?</h2>
-          <p className='intro'>DecodeMe is a website that turns transparancy into insightfulness.</p>
-          <p>This is done by allowing you to upload your JSON files and get a visualised overview of the contents back. 
+          <p className='intro'></p>
+          <p>DecodeMe is a website that turns <i>transparancy</i> into <i>insightfulness</i>. This is done by allowing you to upload your JSON files and get a visualised overview of the contents back. 
             This data overview is designed to give you insights and help you make a educated choices regarding your data protection. 
             DecodeMe helps you request your data and provides links to interesting articles that discuss data privacy and give tips.
             This is done to help you on your way on the data protection journey</p>

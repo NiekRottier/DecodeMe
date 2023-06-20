@@ -1,5 +1,9 @@
 @import './typography';
 
+:root{
+    font-size: 14px;
+}
+
 *{
     box-sizing: border-box;
 }
@@ -12,45 +16,6 @@ html{
 body{
     margin: 0;
     background-color: $white;
-}
-
-menu{
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin: 0;
-    padding: 2rem 4rem;
-    background: rgb(115,193,219);
-    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-    
-    a{
-        margin-right: 2rem;
-        margin-bottom: 0;
-        text-align: center;
-        color: $white;
-        font-size: 1.5rem;
-        font-weight: 700;
-        text-decoration: none;
-        
-        &:hover{
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        &.home-icon img, &.menu-icon img{
-            height: 2rem;
-            width: 2rem;
-        }
-
-        &.menu-icon {
-            display: none;
-            align-self: flex-end;
-        }
-    }
 }
 
 .header{
@@ -120,16 +85,6 @@ main{
         &:nth-of-type(3){
             background-color: $primary-color--light;
         }
-
-        &.width--100{
-            width: 100%;
-        }
-        &.width--50{
-            width: calc(50% - 1rem);
-        }
-        &.width--33{
-            width: calc((100% / 3) - 1rem);
-        }
     }
 }
 
@@ -137,15 +92,25 @@ footer{
     width: 100%;
     padding: 2rem 4rem;
     border-top: solid 3px $primary-color--dark;
-
+    
     > p{
         margin: 0;
     }
 }
 
+.width--100{
+    width: 100%;
+}
+.width--50{
+    width: calc(50% - 1rem);
+}
+.width--33{
+    width: calc((100% / 3) - 1rem);
+}
+
 @media only screen and (max-width: 1200px){
     main{
-        > section{
+        > section, [class *= 'Section']{
             &.width--50, &.width--33{
                 width: 100%;
             }
@@ -154,39 +119,6 @@ footer{
 }
 
 @media only screen and (max-width: 800px){
-    menu{
-        flex-direction: column;
-        align-items: center;
-        padding: 2rem;
-        // background: $primary-color--dark;
-        backdrop-filter: blur(8px);
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 4px 20px 1px black;
-        
-        a{
-            display: none;
-            margin-right: 0;
-            margin-top: 1rem;
-
-            &:first-child{
-                margin-top: 0;
-            }
-
-            &.menu-icon{
-                display: inline;
-                img{
-                    display: block;
-                }
-            }
-        }
-
-        &.active{
-            a{
-                display: inline;
-            }
-        }
-    }
-
     .header{
         height: calc(50vh + 6rem);
     }

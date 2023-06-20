@@ -3,36 +3,30 @@ import '../styles/Decoder.scss';
 
 import { TagCloud } from 'react-tagcloud'
 import { useLocation } from 'react-router-dom';
+import Menu from '../components/Menu';
 
 function Decoder() {
-  const [uploadedFile, setUploadedFile] = useState({name: 'No file uploaded'})
-  const [isFileUploaded, setIsFileUploaded] = useState(0)
-
-  const [fileJson, setFileJson] = useState()
   const [jsonValues, setJsonValues] = useState([])
 
   const [titles, setTitles] = useState()
   const [duplicateURLs, setDuplicateURLs] = useState({})
-  const [TagCloudHTML, setTagCloudHTML] = useState(<p className='tag-cloud'>Please analyse the file to see the wordcloud</p>)
-  const [topURLs, setTopURLs] = useState(<p>Please analyse the file to see the top URLs</p>)
+  const [TagCloudHTML, setTagCloudHTML] = useState(<p className='tag-cloud'>Analysing data...</p>)
+  const [topURLs, setTopURLs] = useState(<p>Analysing data...</p>)
 
-  let location = useLocation()
-
+  const location = useLocation()
+  let browserHistoryJson
+  let autofillJson
+  
   useEffect(() => {
-    console.log(location.state);
-  }, [location])
-
-  function handleChange(event) {
-    console.log(event.target.files[0]);
-    if (event.target.files[0]) {
-      setUploadedFile(event.target.files[0]);
-      setIsFileUploaded(isFileUploaded+1);
-      console.log('File has been uploaded.')
-    } else {
-      setIsFileUploaded(0);
-      console.log('File upload has failed.')
+    console.log(browserHistoryJson);
+    console.log(autofillJson);
+    
+    if (location.state) {
+      browserHistoryJson = location.state['Browser History']
+      autofillJson = location.state['Autofill']
     }
-  }
+    
+  }, [])
 
   // Check if an object is empty
   function isEmptyObject(obj) {
@@ -41,24 +35,6 @@ function Decoder() {
       } else {
           return false
       }
-  }
-
-  // Get the content from the file and put it in the FileJson state
-  function readJsonFile() {
-    if (isFileUploaded) {
-      const blob = new Blob([uploadedFile], {type:"application/json"});
-
-      let reader = new FileReader()
-      reader.addEventListener("load", () => {
-        setFileJson(JSON.parse(reader.result))
-      })
-
-      reader.readAsText(blob)
-
-      console.log('Put the JSON content into a State')
-    } else {
-      console.log('No file has been uploaded.')
-    }
   }
 
   // Return the analysis (word/letter frequency) of the given text 
@@ -120,12 +96,14 @@ function Decoder() {
 
     setTagCloudHTML(<TagCloud 
       key={0} 
-      minSize={20} 
+      minSize={15} 
       maxSize={50} 
+      colorOptions={{
+        luminosity: 'dark',
+        hue: '#609ae0'
+      }}
       tags={tags}
       onClick={tag => alert(`'${tag.value}' was seen ${tag.count} times!`)} />)
-
-      
   }
 
   // Extract all the Json values and put an array of them in the JsonValues state
@@ -149,26 +127,18 @@ function Decoder() {
     }
   }
 
-  // Read the Json file when it is uploaded 
-  useEffect(() => {
-    if (isFileUploaded && !isEmptyObject(uploadedFile)) {
-      readJsonFile()
-      console.log(uploadedFile.name);
-    }
-  }, [isFileUploaded])
-
   // Set the Json values when the file updates
   useEffect(() => {
-    if (fileJson) {
-      extractJsonValues(fileJson)
+    if (browserHistoryJson) {
+      extractJsonValues(browserHistoryJson)
 
-      setTitles(analyseSiteTitles(fileJson))
+      setTitles(analyseSiteTitles(browserHistoryJson))
 
       console.log('Extracted JSON values...');
     }
-  }, [fileJson])
+  }, [browserHistoryJson])
 
-  // Analyse the values when they update
+  // // Analyse the values when they update
   useEffect(() => {
     if (jsonValues) {
       findDuplicateURLs(jsonValues)
@@ -185,7 +155,7 @@ function Decoder() {
       let newTopURLs = []
       // Put the top 20 most visited URLs in newTopURLs
       for (let i = 0; i < 20; i++) {
-        console.log(sortedList[i]);
+        // console.log(sortedList[i]);
         if (sortedList[i]) {
           let newItem = <p className='topURL' key={i}><b>{sortedList[i][0]}</b> <br /> visited <i>{sortedList[i][1]}</i> times</p>
           newTopURLs.push(newItem)
@@ -203,25 +173,61 @@ function Decoder() {
     }
   }, [titles])
 
+  // Match .tagCloudSection and .topURLsSection heights
+  useEffect(() => {
+    let tagEl = document.querySelector('.tagCloudSection')
+    let urlEl = document.querySelector('.topURLsSection')
+
+    urlEl.style.height = tagEl.clientHeight + 'px'
+
+  })
+
   return (
     <div className="Decoder">
-      <p id="backgroundText">{jsonValues.join(' ')}</p>
-      <header>
-        <h1>The Data Reviewer</h1>
-        <div id='inputContainer'>
-          <label htmlFor="fileInput">Upload a JSON-file</label>
-          <input type="file" id="fileInput" accept='.json' onChange={handleChange} />
-          <small>Uploaded: {uploadedFile.name}</small>
+      <p className="backgroundText">{jsonValues.join(' ')}</p>
+      
+      <Menu settings={[
+        { 'target': 'browser-history', 'title' : 'Browser History' },
+        { 'target': 'autofill', 'title' : 'Autofill' }
+      ]} />
+
+      <header className='header'>
+        <div className="header__img">
+          <img src="/assets/img/banner.png" />
+        </div>
+        <div className='header__txt'>
+          <h1 className='title'>DecodeMe</h1>
+          <h2 className='subtitle'>From transparancy to insight</h2>
         </div>
       </header>
 
-      <div id="analysisContainer">
-        { TagCloudHTML }
+      <main>
+        <div className="browserHistory" id='browser-history'>
+          <h2>Browser History data</h2>
+          <div className='tagCloudSection width--50'>
+            <h3>Website titles</h3>
+            <hr />
+            { TagCloudHTML }
+          </div>
 
-        <div id="topURLsContainer">
-          { topURLs }
+          <div className="topURLsSection width--50">
+            <h3>URL's</h3>
+            <hr />
+            <div className='tagContainer'>
+              { topURLs }
+            </div>
+          </div>
         </div>
-      </div>
+
+        <div className="autofill" id='autofill'>
+          <h2>Autofill data</h2>
+          <p>COMING SOON</p>
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; 2023 - Niek Rottier</p>
+      </footer>
     </div>
   );
 }
