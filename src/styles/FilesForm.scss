@@ -3,9 +3,9 @@
 .FilesForm{
     display: flex;
     flex-flow: row wrap;
-    justify-content: center;
+    align-items: start;
     gap: 2rem;
-    margin-top: 1rem;
+    height: min-content;
 
     .uploadButtons{
         display: flex;
