@@ -10,23 +10,13 @@ function Decoder() {
 
   const [titles, setTitles] = useState()
   const [duplicateURLs, setDuplicateURLs] = useState({})
-  const [TagCloudHTML, setTagCloudHTML] = useState(<p className='tag-cloud'>Analysing data...</p>)
+  const [tagCloudHTML, setTagCloudHTML] = useState(<p className='tag-cloud'>Analysing data...</p>)
   const [topURLs, setTopURLs] = useState(<p>Analysing data...</p>)
+  const [profileData, setProfileData] = useState(<p>Analysing data...</p>)
 
   const location = useLocation()
   let browserHistoryJson
   let autofillJson
-  
-  useEffect(() => {
-    console.log(browserHistoryJson);
-    console.log(autofillJson);
-    
-    if (location.state) {
-      browserHistoryJson = location.state['Browser History']
-      autofillJson = location.state['Autofill']
-    }
-    
-  }, [])
 
   // Check if an object is empty
   function isEmptyObject(obj) {
@@ -35,6 +25,31 @@ function Decoder() {
       } else {
           return false
       }
+  }
+
+  function daysSince(timestamp) {
+    let currentTime = Math.floor(Date.now() / 1000)
+    let elapsed = currentTime - timestamp
+    
+    let sPerMinute = 60;
+    let sPerHour = sPerMinute * 60;
+    let sPerDay = sPerHour * 24;
+    let sPerMonth = sPerDay * 30;
+    let sPerYear = sPerDay * 365;
+
+    if (elapsed < sPerMinute) {
+      return Math.round(elapsed/1000) + ' seconds ago';   
+    } else if (elapsed < sPerHour) {
+          return Math.round(elapsed/sPerMinute) + ' minutes ago';   
+    } else if (elapsed < sPerDay ) {
+          return Math.round(elapsed/sPerHour ) + ' hours ago';   
+    } else if (elapsed < sPerMonth) {
+        return 'Approximately ' + Math.round(elapsed/sPerDay) + ' days ago';   
+    } else if (elapsed < sPerYear) {
+        return 'Approximately ' + Math.round(elapsed/sPerMonth) + ' months ago';   
+    } else {
+        return 'Approximately ' + Math.round(elapsed/sPerYear ) + ' years ago';   
+    }
   }
 
   // Return the analysis (word/letter frequency) of the given text 
@@ -127,16 +142,57 @@ function Decoder() {
     }
   }
 
+  useEffect(() => {
+    if (location.state) {
+      browserHistoryJson = location.state['Browser History']
+      autofillJson = location.state['Autofill']
+    }
+  }, [])
+
   // Set the Json values when the file updates
   useEffect(() => {
-    if (browserHistoryJson) {
+    if (!isEmptyObject(browserHistoryJson)) {
       extractJsonValues(browserHistoryJson)
 
       setTitles(analyseSiteTitles(browserHistoryJson))
-
-      console.log('Extracted JSON values...');
+    } else {
+      console.log('No BrowserHistory.json found');
+      setTagCloudHTML(<p>BrowserHistory.json not uploaded</p>)
+      setTopURLs(<p>BrowserHistory.json not uploaded</p>)
     }
   }, [browserHistoryJson])
+
+  // Puts Autofill data into a object in the profileData state 
+  function analyseAutofill() {
+    let profiles = autofillJson['Autofill Profile']
+    
+    let useCount = []
+    for (let i = 0; i < profiles.length; i++) {
+      useCount.push(profiles[i].use_count)
+    }
+    let profile = profiles[useCount.indexOf(Math.max(...useCount))]
+
+    setProfileData(
+      <div className='profile'>
+        <p className="name">{profile.name_full[0] ? profile.name_full[0] : 'No name found'}</p>
+        <p className="address"><b>Address:</b> <br /> 
+        {profile.address_home_line1 ? profile.address_home_line1 : 'No street found'}, {profile.address_home_city ? profile.address_home_city : 'No city found'} <br /> 
+        {profile.address_home_zip ? profile.address_home_zip : 'No ZIP code found'}</p>
+        <p className="contact"><b>Contact:</b> <br /> 
+          {profile.phone_home_whole_number[0] ? profile.phone_home_whole_number[0] : 'No phonenumber found'} | {profile.email_address[0] ? profile.email_address[0] : 'No email address found'}</p>
+        <p className="lastUsed">Last used: {daysSince(profile.use_date)}</p>
+      </div>
+    )
+  }
+
+  useEffect(() => {
+    if (!isEmptyObject(autofillJson)) {
+      analyseAutofill()
+    } else {
+      setProfileData(<p>Autofill.json not uploaded</p>)
+      console.log('No Autofill.json found');
+    }
+  }, [autofillJson])
 
   // // Analyse the values when they update
   useEffect(() => {
@@ -179,7 +235,6 @@ function Decoder() {
     let urlEl = document.querySelector('.topURLsSection')
 
     urlEl.style.height = tagEl.clientHeight + 'px'
-
   })
 
   return (
@@ -207,7 +262,7 @@ function Decoder() {
           <div className='tagCloudSection width--50'>
             <h3>Website titles</h3>
             <hr />
-            { TagCloudHTML }
+            { tagCloudHTML }
           </div>
 
           <div className="topURLsSection width--50">
@@ -221,7 +276,12 @@ function Decoder() {
 
         <div className="autofill" id='autofill'>
           <h2>Autofill data</h2>
-          <p>COMING SOON</p>
+          <div className='autofillProfile width--50'>
+            <h3>Profile</h3>
+            <hr />
+            { profileData }
+            <p></p>
+          </div>
         </div>
       </main>
 

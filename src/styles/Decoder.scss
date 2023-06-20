@@ -35,15 +35,15 @@
     }
   }
 
-  .browserHistory{
-    .tagCloudSection, .topURLsSection{
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      padding: 2rem;
-      border-radius: 5px;
-    }
+  .tagCloudSection, .topURLsSection, .autofillProfile{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 2rem;
+    border-radius: 5px;
+  }
 
+  .browserHistory{
     .tagCloudSection{
       height: max-content;
       background: $primary-color;
@@ -114,7 +114,26 @@
   }
 
   .autofill{
-    text-align: center;
-    padding-bottom: 2rem;
+    .autofillProfile{
+      margin: 0 auto ;
+      background-color: $primary-color--light;
+
+      .profile{
+        text-align: left;
+
+        &.hidden{
+          display: none;
+        }
+
+        .name{
+          font-size: 1.4rem;
+          font-weight: 600;
+        }
+
+        .lastUsed{
+          font-size: 1rem;
+        }
+      }
+    }
   }
 }

@@ -110,10 +110,8 @@ footer{
 
 @media only screen and (max-width: 1200px){
     main{
-        > section, [class *= 'Section']{
-            &.width--50, &.width--33{
-                width: 100%;
-            }
+        .width--50, .width--33{
+            width: 100%;
         }
     }
 }
