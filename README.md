@@ -13,6 +13,9 @@ To run the project in a local eviroment, run ```npm start```. The project runs o
 
 To build the project, run ```npm build```.
 
+## Publishing
+Decode me is published at the following domain using Netlify: https://decodeme.netlify.app/
+
 ## Routing
 Routing is handled with the package 'react-router-dom'.
 
